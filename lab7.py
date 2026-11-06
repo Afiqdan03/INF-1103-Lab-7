@@ -81,3 +81,33 @@ class DigitalProduct(Product):
 
     def to_dict(self) -> dict:
         return {"type": "digital", "product_id": self._product_id, "name": self._name, "price": self._price, "stock": self._stock, "download_size": self._download_size}
+    
+# update inventoy class to handle diffrent product types during json save/load
+class Inventory:
+    def __init__(self):
+        self._products = {}
+
+    def add_product(self, product: Product) -> bool:
+        self._products[product.product_id] = product
+        return True
+
+    def save_to_file(self, filename: str = "inventory.json") -> None:
+        data = [p.to_dict() for p in self._products.values()]
+        with open(filename, 'w') as f:
+            json.dump(data, f, indent=4)
+
+    def load_from_file(self, filename: str = "inventory.json") -> None:
+        if not os.path.exists(filename):
+            return
+        with open(filename, 'r') as f:
+            data = json.load(f)
+            self._products.clear()
+            for item in data:
+                ptype = item.get("type")
+                if ptype == "physical":
+                    p = PhysicalProduct(item["product_id"], item["name"], item["price"], item["stock"], item["weight"])
+                elif ptype == "digital":
+                    p = DigitalProduct(item["product_id"], item["name"], item["price"], item["stock"], item["download_size"])
+                else:
+                    continue
+                self._products[p.product_id] = p
