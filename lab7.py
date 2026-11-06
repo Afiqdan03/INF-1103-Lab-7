@@ -45,4 +45,39 @@ class Product(ABC):
 
     @abstractmethod
     def to_dict(self) -> dict:
-        passgit commit -m "converted Product into abstract class with absract methods"
+        pass
+    
+# physcial and digtal products extend base product and override display info using super()
+class PhysicalProduct(Product, CanBeShipped):
+    def __init__(self, product_id: str, name: str, price: float, stock: int, weight: float):
+        super().__init__(product_id, name, price, stock)
+        self._weight = weight
+
+    def display_information(self) -> None:
+        super().display_information()
+        print(f" | Weight: {self._weight} kg | Fulfilment: {self.get_fulfilment_info()}")
+
+    def get_fulfilment_info(self) -> str:
+        return "Requires physical shipping"
+
+    def calculate_shipping_cost(self) -> float:
+        return 5.00 + (2.00 * self._weight)
+
+    def to_dict(self) -> dict:
+        return {"type": "physical", "product_id": self._product_id, "name": self._name, "price": self._price, "stock": self._stock, "weight": self._weight}
+
+
+class DigitalProduct(Product):
+    def __init__(self, product_id: str, name: str, price: float, stock: int, download_size: float):
+        super().__init__(product_id, name, price, stock)
+        self._download_size = download_size
+
+    def display_information(self) -> None:
+        super().display_information()
+        print(f" | Download Size: {self._download_size} MB | Fulfilment: {self.get_fulfilment_info()}")
+
+    def get_fulfilment_info(self) -> str:
+        return "Delivered via digital download link"
+
+    def to_dict(self) -> dict:
+        return {"type": "digital", "product_id": self._product_id, "name": self._name, "price": self._price, "stock": self._stock, "download_size": self._download_size}
