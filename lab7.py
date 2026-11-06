@@ -111,3 +111,4 @@ class Inventory:
                 else:
                     continue
                 self._products[p.product_id] = p
+            
