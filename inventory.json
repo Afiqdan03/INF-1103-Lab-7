@@ -1,0 +1,18 @@
+[
+    {
+        "type": "physical",
+        "product_id": "200",
+        "name": "wheels",
+        "price": 50.0,
+        "stock": 10,
+        "weight": 5.0
+    },
+    {
+        "type": "digital",
+        "product_id": "2001",
+        "name": "discs",
+        "price": 10.0,
+        "stock": 100,
+        "download_size": 900.0
+    }
+]
